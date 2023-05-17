@@ -11,9 +11,9 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="root-container">
         <header class="header">
-            <div class="warpper">
+            <div class="wrapper">
                 <nav class="navbar">
                     <section class="nav-section-logo nav-section">
                         <img class="logo" src="icons/icons8-bookmark.gif" alt="book">
@@ -28,23 +28,24 @@
                     </section>
                     <section class="nav-section-icon nav-section">
                         <ul class="nav-menu-icon">
+                            <li class="nav-menu-icon-item">
+                                    <span class="material-icons btn-search">search</span>
+                            </li>
                             <li class="nav-menu-item-icon">
                                 <a href="#"><span class="material-icons">shopping_cart</span></a></li>
-                            <li class="nav-menu-icon-item">
-                                <a href="#">
-                                    <span class="material-icons">search</span> 
-                                </a>
-                            </li>
                         </ul>
+                    </section>
+                    <section class="nav-section-search hide">
+                        <form action="#">
+                            <input type="text" name="search" id="search" placeholder="Buscar">
+                            <span class="search-button material-icons">search</span>
+                        </form>
                     </section>
                 </nav>
             </div>
         </header>
         <main class="main">
             <div class="wrapper">
-                <aside>
-                </aside>
-                <section class="content"></section>
             </div>
         </main>
     </div>
