@@ -40,18 +40,47 @@ const productos = [
 
 const cart = [];
 
+const fnSetCart = () => {
+    const cartContainer = document.querySelector('.card-quantity');
+    const cart_quantity = cart.reduce((acc, product) => acc + product.stock, 0);
+    cartContainer.textContent = `${cart_quantity}`;
+}
+
+const fnCreateCarProduct = (product) =>
+    (`<div class="car-item">
+                    <img src="${product.img}" class="car-item-img" alt="...">
+                    <div class="car-item-body">
+                    <h4 class="car-item-title">${product.description}</h4>
+                    <p class="car-item-price"> precio: <span class="car-item-price-value">${product.price}</span></p>
+                    <p class="car-item-quantity"> cantidad: <span class="car-item-quantity-value">${product.stock}</span> </p>
+                    <p class="car-item-total">${product.stock * product.price}</p>
+               </div>
+    </div>`
+    );
+
+const fnLoadCarPage = () => {
+    const cartContainer = document.querySelector('.car-container > .car-details');
+    cartContainer.innerHTML = "";
+    cart.forEach((product) => {
+        const html = fnCreateCarProduct(product);
+        cartContainer.innerHTML += html;
+    });
+}
+
 const fnAddToCart = (event, id) => {
     const product = productos.find((product) => product.id === id);
     const productInCart = cart.find((product) => product.id === id);
     const stock = document.querySelector(`#stock-${id}`);
-    if (product.stock > 0) {
+    if (product.stock > 0)
+    {
         product.stock--;
         if (productInCart) {productInCart.stock++;}
         else {cart.push({...product, stock:1});}
         stock.textContent = product.stock;
-        console.log(cart);
+        fnSetCart();
     }
 };
+
 
 const createProduct = (product) =>
     (` <div class="card">
@@ -98,6 +127,11 @@ const router = (element, path) => {
                 case 'fragments/shop': {
                     const container = document.querySelector('.products-container');
                     renderProducts(productos, container);
+                    break;
+                }
+                case 'fragments/cart': {
+                    fnLoadCarPage();
+                    break;
                 }
             }
         }
@@ -107,6 +141,8 @@ const router = (element, path) => {
 document.addEventListener("DOMContentLoaded", function (event) {
     //Agregando event de busqueda
     const btnSearch = document.querySelector(".btn-search");
+    const inputSearch = document.querySelector("#search");
+
     btnSearch.addEventListener("click", function (event) {
         event.preventDefault();
         const currenText = event.target.textContent;
@@ -114,6 +150,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
         const search = document.querySelector(".nav-section-search");
         const hideShowClass = currenText === 'close' ? "hide" : "show";
         search.setAttribute("class", `nav-section-search ${hideShowClass}`)
+    });
+
+    inputSearch.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        const value = event.target.value;
+        let filterProducts   = productos;
+        const container = document.querySelector('.products-container');
+        if (value === "" || value.length < 3) {filterProducts = productos;}
+        else{filterProducts = productos.filter((product) => product.description.toLowerCase().includes(value.toLowerCase()));}
+
+        container.innerHTML = "";
+        renderProducts(filterProducts, container);
     });
 
     //Agregando event de menu
