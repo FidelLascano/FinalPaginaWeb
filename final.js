@@ -5,6 +5,17 @@ const fnSendRouter =  (event) => {
     router(element, `fragments/${path}`);
 }
 
+const fnCloseBuy = (event) => {
+    event.preventDefault();
+    const pay_container = document.querySelector('.pay-container');
+    pay_container.setAttribute('class', 'pay-container hide');
+}
+
+const fnOpenBuy = (event) => {
+    event.preventDefault();
+    const pay_container = document.querySelector('.pay-container');
+    pay_container.setAttribute('class', 'pay-container show');
+}
 
 const productos = [
     {
@@ -92,7 +103,7 @@ const fnLoadCarPage = () => {
 <p class="card-resume-subtotal">Subtotal: $${total.toFixed(2)}</p>
 <p class="card-resume-taxes">Impuesto: $${(total*.12).toFixed(2)}</p>
 <h1 class="card-resume-total">Total: $${(total*1.12).toFixed(2)}</h1>
-<button class="card-botton-pay" onclick="fnBuy(event, total)">Pagar</button>
+<button class="card-botton-pay" onclick="fnOpenBuy(event)">Pagar</button>
 `;
     }
 }
