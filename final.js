@@ -1,3 +1,11 @@
+const fnSendRouter =  (event) => {
+    event.preventDefault();
+    const path = event.currentTarget.getAttribute("data-to");
+    const element = document.querySelector('#content-page');
+    router(element, `fragments/${path}`);
+}
+
+
 const productos = [
     {
         id: 1,
@@ -37,7 +45,6 @@ const productos = [
     }
 ]
 
-
 const cart = [];
 
 const fnSetCart = () => {
@@ -50,7 +57,7 @@ const fnCreateCarProduct = (product) =>
     (`<div class="car-item">
                     <img src="${product.img}" class="car-item-img" alt="...">
                     <div class="car-item-body">
-                    <h4 class="car-item-title">${product.description}</h4>
+                    <h4 class="car-item-title">${product.description} <span class="material-icons">close</span></h4>
                     <p class="car-item-price"> precio: <span class="car-item-price-value">${product.price}</span></p>
                     <p class="car-item-quantity"> cantidad: <span class="car-item-quantity-value">${product.stock}</span> </p>
                     <p class="car-item-total">${product.stock * product.price}</p>
@@ -60,27 +67,52 @@ const fnCreateCarProduct = (product) =>
 
 const fnLoadCarPage = () => {
     const cartContainer = document.querySelector('.car-container > .car-details');
+    const cartTotal = document.querySelector('.car-container > .car-resume');
     cartContainer.innerHTML = "";
-    cart.forEach((product) => {
-        const html = fnCreateCarProduct(product);
-        cartContainer.innerHTML += html;
-    });
+    cartTotal.innerHTML = "";
+    if (cart.length === 0) {
+        cartContainer.innerHTML = `<div class="car-item car-no-item">
+                                            <p class="car-item-none">No hay productos en el carrito</p>
+                                    </div>`;
+        cartTotal.innerHTML =`
+        <p className="card-resume-subtotal">Subtotal: $${0}</p>
+        <p className="card-resume-taxes">Impuesto: $${0}</p>
+        <h1 className="card-resume-total">Total: $${0}</h1>
+        <a class="nav-link" data-to="shop" onclick="fnSendRouter(event)">Ir a comprar...</a>
+        `;
+        return;
+    }
+    else {
+        cart.forEach((cart_item) => {
+            const html = fnCreateCarProduct(cart_item);
+            cartContainer.innerHTML += html;
+        });
+        const total = cart.reduce((acc, product) => acc + (product.stock * product.price), 0);
+        cartTotal.innerHTML = `
+<p class="card-resume-subtotal">Subtotal: $${total.toFixed(2)}</p>
+<p class="card-resume-taxes">Impuesto: $${(total*.12).toFixed(2)}</p>
+<h1 class="card-resume-total">Total: $${(total*1.12).toFixed(2)}</h1>
+<button class="card-botton-pay" onclick="fnBuy(event, total)">Pagar</button>
+`;
+    }
 }
+
 
 const fnAddToCart = (event, id) => {
     const product = productos.find((product) => product.id === id);
     const productInCart = cart.find((product) => product.id === id);
     const stock = document.querySelector(`#stock-${id}`);
-    if (product.stock > 0)
-    {
+    if (product.stock > 0) {
         product.stock--;
-        if (productInCart) {productInCart.stock++;}
-        else {cart.push({...product, stock:1});}
+        if (productInCart) {
+            productInCart.stock++;
+        } else {
+            cart.push({...product, stock: 1});
+        }
         stock.textContent = product.stock;
         fnSetCart();
     }
 };
-
 
 const createProduct = (product) =>
     (` <div class="card">
@@ -100,8 +132,9 @@ const createProduct = (product) =>
                     <button class="btn btn-primary card-botton" onclick="fnAddToCart(event,${product.id})">Comprar</button>
                 </div>
             </div>`)
-
 const container = document.querySelector('.products-container');
+
+
 const renderProducts = (products, container) => {
     products.forEach(product => {
         const html = createProduct(product);
@@ -155,10 +188,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
     inputSearch.addEventListener("keyup", function (event) {
         event.preventDefault();
         const value = event.target.value;
-        let filterProducts   = productos;
+        let filterProducts = productos;
         const container = document.querySelector('.products-container');
-        if (value === "" || value.length < 3) {filterProducts = productos;}
-        else{filterProducts = productos.filter((product) => product.description.toLowerCase().includes(value.toLowerCase()));}
+        if (value === "" || value.length < 3) {
+            filterProducts = productos;
+        } else {
+            filterProducts = productos.filter((product) => product.description.toLowerCase().includes(value.toLowerCase()));
+        }
 
         container.innerHTML = "";
         renderProducts(filterProducts, container);
@@ -167,12 +203,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //Agregando event de menu
     const menuItems = document.querySelectorAll("a[data-to]");
     menuItems.forEach((item) => {
-        item.addEventListener("click", function (event) {
-            event.preventDefault();
-            const path = event.currentTarget.getAttribute("data-to");
-            const element = document.querySelector('#content-page');
-            router(element, `fragments/${path}`);
-        });
+        item.addEventListener("click", fnSendRouter);
     });
 
 });
