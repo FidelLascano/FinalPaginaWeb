@@ -53,6 +53,24 @@ const productos = [
         price: 0.66,
         stock: 80,
         category: 'cuadernos'
+    },
+    {
+        id: 5,
+        img: 'https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_600,h_600/https://juanmarcet.com/wp-content/uploads/2021/01/0202135767.jpg',
+        description: 'Grapadora Mini Set Con Grapas Dl Grapas N.- 10.',
+        details: 'Colores Surtidos',
+        price: 2.35,
+        stock: 88,
+        category: 'grapadoras'
+    },
+    {
+        id: 6,
+        img: 'https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_600,h_600/https://juanmarcet.com/wp-content/uploads/2021/01/0202135763.jpg',
+        description:'Organizador De Escritorio Deli Metálico Negro',
+        details: 'detalles',
+        price: 20.25,
+        stock: 77,
+        category: 'organizador'
     }
 ]
 
