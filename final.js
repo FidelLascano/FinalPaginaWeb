@@ -149,7 +149,7 @@ const createProduct = (product) =>
                 <div class="card-body">
                 <p class="card-text card-description">
                     <span class="card-item-title"></span>
-                    <span class="card-item-value">${product.description}</span>
+                    <span class="card-item-value">${product.description.length>20?product.description.substring(0,20).concat('<span class="more">mas detalles...</span>'): product.description}</span>
                 </p>
                 <p class="card-text card-price">
                     ${product.price}

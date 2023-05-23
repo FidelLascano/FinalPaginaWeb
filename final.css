@@ -588,3 +588,11 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.more
+{
+    padding-left: 0.5em;
+    color: var(--white);
+    font-weight: normal;
+    font-size: 0.75em;
+}
